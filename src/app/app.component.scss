@@ -1,0 +1,11 @@
+* {
+  font-family: Verdana;
+}
+main {
+  padding:1rem;
+  & form{
+    border:1px solid #ccc;
+    box-shadow: .5rem .5rem 1rem rgba(100,100,100,0.2);
+    padding:2rem;
+  }
+}

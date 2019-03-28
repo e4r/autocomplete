@@ -1,20 +1,86 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<main>
+  <h1>Esempio di Form</h1>
 
+  <form [formGroup]="form">
+    <mat-form-field>
+      <input
+        type="text"
+        (input)="search($event)"
+        placeholder="Inizia a digitare*"
+        formControlName="autocompleteField"
+        matInput
+        [matAutocomplete]="auto"
+      />
+
+      <!--
+        la directive #auto in mat-autocomplete fa riferimento
+        alla directive in <input [matAutoComplete]="auto">
+
+        quindi se voleste chiamare questo autocomplete 'caio',
+
+        allora i tag dovrebbero essere
+
+        <input [matAutocomplete]="caio" ... />
+
+        <mat-autocomplete #caio="matAutocomplete">
+
+
+          IMPORTANTE: avrete notato che selezionato un'opzione, la input sopra viene
+          popolata con un numero.
+          Questo avviene perché l'attributo [value] è popolato con option.id .
+          Significa che come valore io sto salvando l'id dell'opzione.
+
+          Questa è una buona scelta, poiché è plausibile che si voglia salvare l'id, tuttavia
+          nella textbox dovrebbe vedersi il testo.
+
+          In tal caso è consigliabile salvarsi la variabile in un campo hidden e popolare invece
+          la casella di testo (magari associata ad un formcontrolname di appoggio) con il titolo dell'oggetto.
+      -->
+      <mat-autocomplete mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of remoteOptions" [value]="option.id">
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="checkbox-wrapper">
+      <mat-checkbox formControlName="exampleCheckbox"
+        >Io devo essere per forza checkato*</mat-checkbox
+      >
+    </div>
+    <div class="select-wrapper">
+      <mat-form-field>
+        <mat-label>Cibo Preferito</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let cibo of cibi" [value]="cibo">
+            {{ cibo }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <hr />
+    <div class="btn-wrapper">
+      <!--
+          Fra tutti i benefici dei FormGroup
+          c'è quello di poter controllare se tutti i campi sono stati compilati
+          secondo come espresso nel metodo `buildForm`.
+          Ogni controllo ha un `Validators` che assegna un validatore, se
+          tutti i validators non sono rispettati allora il bottone di invio sarà disabilitato.
+
+          Puoi comunque usare una qualsiasi `espressione` pseudo-JS al posto di form.invalid
+
+          Ad esempio se volessi controllare che il postId selezionato sia proprio 4, allora
+          l'espressione sarebbe
+
+          [disabled]="form.get('autocompleteField').value !== 4"
+
+          che in italiano è più o meno : disabilita il bottone di invio se il valore selezionato
+          del campo 'autocompleteField' non è 4.
+        -->
+
+      <button [disabled]="form.invalid" mat-raised-button color="primary">
+        Invia Form
+      </button>
+    </div>
+  </form>
+</main>
